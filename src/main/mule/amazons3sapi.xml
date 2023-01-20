@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <apikit:config name="amazons3sapi-config" api="amazons3sapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <flow name="amazons3sapi-main">
+        <http:listener path="/apis3/*" config-ref="HTTP_Listener_config_Domain">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="amazons3sapi-config" />
+		<error-handler>
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="c9855ca3-50d9-43d5-a56f-6db88e7a4c88" type="ANY">
+				<logger level="INFO" doc:name="Logger" doc:id="a8b1f6cc-b0b4-4996-bfbb-4753d7ea9c24" message="#[error.detailedDescription]"/>
+			</on-error-continue>
+        </error-handler>
+    </flow>
+    <flow name="amazons3sapi-console">
+        <http:listener path="/consoles3/*" config-ref="HTTP_Listener_config_Domain">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="amazons3sapi-config" />
+    </flow>
+    <flow name="delete:\deleteasset:amazons3sapi-config">
+		<flow-ref doc:name="Flow Reference" doc:id="f1ccfd81-5c98-4914-9c72-28394b9ca0ad" name="s3sapiFlow1"/>
+    </flow>
+    <flow name="post:\publishasset:application\json:amazons3sapi-config">
+		<flow-ref doc:name="Flow Reference" doc:id="9fd145d1-8522-41b1-bd85-f97a5bbe8f13" name="s3sapiFlow"/>
+    </flow>
+</mule>

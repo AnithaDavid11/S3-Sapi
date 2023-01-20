@@ -1,0 +1,14 @@
+%dw 2.0
+
+type auto_d9cd47cc_2cf2_45dc_9508_6b0366576093_Input_Payload = {
+  updateDate: String, 
+  assetMimeType: String, 
+  assetId: Number, 
+  assetPayload: { _?: Any }, 
+  assetName: String, 
+  status: String, 
+  expirationDate: String, 
+  createDate: String, 
+  _?: Any
+}
+

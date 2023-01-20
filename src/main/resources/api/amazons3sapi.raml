@@ -1,0 +1,29 @@
+#%RAML 1.0
+title: amazons3sapi
+types:
+  asset: !include datatypes/assetdataType.raml
+
+/publishasset:
+  post:
+    body:
+      application/json:
+        type: asset
+        example: !include examples/postassetexample.json 
+    responses:
+      201:
+        body:
+          application/json:
+            type: object
+            example: 
+             {
+              "Message" : "Your asset is published in Amazon S3 bucket"
+             }
+
+/deleteasset:
+  delete:
+    responses:
+      202:
+        body:
+          application/json:
+            type: string
+            example : "Your asset is deleted in Amazon S3 bucket"

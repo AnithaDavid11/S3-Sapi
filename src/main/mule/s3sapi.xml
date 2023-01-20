@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:s3="http://www.mulesoft.org/schema/mule/s3"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/s3 http://www.mulesoft.org/schema/mule/s3/current/mule-s3.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<s3:config name="Amazon_S3_Configuration" doc:name="Amazon S3 Configuration" doc:id="5b9ea391-a8dd-4912-a5ea-fffc2e906d0e" >
+		<s3:connection accessKey="AKIARQDRBUAMTDDB55XK" secretKey="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" region="eu-central-1"/>
+	</s3:config>
+	<flow name="s3sapiFlow" doc:id="d9cd47cc-2cf2-45dc-9508-6b0366576093" >
+		<s3:put-object doc:name="Put Object" doc:id="f2ae017d-8cd1-464e-a2e4-157853596e06" config-ref="Amazon_S3_Configuration" bucketName="collectionanitha" key="#[payload.ObjectKeys]" objectACL="PUBLIC_READ_WRITE">
+		</s3:put-object>
+		<ee:transform doc:name="Transform Message" doc:id="7acad0be-d05d-4638-b667-a05b0be0f68d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="s3sapiFlow1" doc:id="f7a62168-77fe-4c85-990b-b693834dd91e" >
+		<s3:delete-object doc:name="Delete Object" doc:id="f40ccb20-2567-40bd-baed-2bfd4362f611" config-ref="Amazon_S3_Configuration" bucketName="collectionanitha" key="#[payload.ObjectKeys]"/>
+		<ee:transform doc:name="Transform Message" doc:id="b1b2ef21-57b2-4d1a-b414-e81897edf0fa" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Message" : "Your asset is deleted"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

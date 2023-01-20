@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="s3sapi-test-suite.xml" />
+	<munit:test name="s3sapi-test-suite-s3sapiFlowTest" doc:id="1e36180a-53d7-48d9-8e19-ec9440a415de" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="a99c22ab-82c1-40c1-a483-e92f07788b7e" processor="s3:put-object">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Put Object" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="f2ae017d-8cd1-464e-a2e4-157853596e06" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="Amazon_S3_Configuration" attributeName="config-ref" />
+					<munit-tools:with-attribute whereValue="collectionanitha" attributeName="bucketName" />
+					<munit-tools:with-attribute whereValue="AUTHENTICATED_READ" attributeName="objectACL" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to s3sapiFlow" doc:id="2e812fb0-77e8-4fb3-8781-ff11783301a9" name="s3sapiFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="97928eb5-37fd-407d-a6fe-2ba6798eed44" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="s3sapi-test-suite-s3sapiFlow1Test" doc:id="dd3badb7-b937-4707-a4f9-d1755a3b0c70" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="dff7c9a5-7293-41bc-b51c-91e5d10b8d81" processor="s3:delete-objects">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Delete Objects" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="5f4664de-5b72-41b6-8ca4-ca0571d75ebb" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="Amazon_S3_Configuration" attributeName="config-ref" />
+					<munit-tools:with-attribute whereValue="collectionanitha" attributeName="bucketName" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to s3sapiFlow1" doc:id="66dd21fc-4edb-4898-b47e-b16bd07bc7b5" name="s3sapiFlow1"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="ab667e24-8799-4b22-af32-f24acc4663df" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+
+</mule>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="amazons3sapi-test-suite.xml" />
+	<munit:test name="amazons3sapi-test-suite-amazons3sapi-mainTest" doc:id="792be0a5-e011-45e2-93c9-f46d471482c8" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="cd8301bc-137d-4136-8e81-9fc504df6a09" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="amazons3sapi-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to amazons3sapi-main" doc:id="74072498-1115-48ec-a971-afeaa2147fda" name="amazons3sapi-main"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="amazons3sapi-test-suite-amazons3sapi-consoleTest" doc:id="47b41da7-87c8-4f54-8c8a-53d4ce78571b" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="af74f689-2778-446a-9e15-a2edb4d3c871" processor="apikit:console">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="amazons3sapi-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to amazons3sapi-console" doc:id="c19ebe8d-4277-4f85-bc7f-59105ccce914" name="amazons3sapi-console"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="amazons3sapi-test-suite-delete:\deleteasset:amazons3sapi-configTest" doc:id="a3beaca7-ebf5-4a8a-9f21-bc394669a0bf" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="348ced68-2e12-4cc9-8f16-30492d9ac3ed" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Flow Reference" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="f1ccfd81-5c98-4914-9c72-28394b9ca0ad" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="s3sapiFlow1" attributeName="name" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to delete:\deleteasset:amazons3sapi-config" doc:id="27fb203e-1520-4dee-904a-b0794953d1b3" name="delete:\deleteasset:amazons3sapi-config"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="amazons3sapi-test-suite-post:\publishasset:application\json:amazons3sapi-configTest" doc:id="33fda4ae-8c0b-4863-9a53-e45eafd8c2f3" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="962795c9-31d5-4d2b-a315-64bfe42053ee" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Flow Reference" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="9fd145d1-8522-41b1-bd85-f97a5bbe8f13" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="s3sapiFlow" attributeName="name" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\publishasset:application\json:amazons3sapi-config" doc:id="3f95bdbf-53db-425a-ab5b-15e4b50ebe4a" name="post:\publishasset:application\json:amazons3sapi-config"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="amazons3sapi-test-suite-amazons3sapi-mainTest1" doc:id="8cc11345-529e-4cd9-9f18-d832ec4b7b8c" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="bfc8b0cd-0525-4559-b932-ddd46d173786" processor="http:listener">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="HTTP_Listener_config" attributeName="config-ref" />
+					<munit-tools:with-attribute whereValue="/api/*" attributeName="path" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="ec4dc067-7d8e-4528-81ba-ee5da583e9e9" >
+				<flow-ref doc:name="Flow-ref to amazons3sapi-main" doc:id="42379029-4be4-4d4e-995e-317123e3c26c" name="amazons3sapi-main" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="be4a1560-4a43-4d8f-8217-b33c9b026003" >
+						<logger level="INFO" doc:name="Logger" doc:id="90660397-5d31-4d57-b0b8-37286ce28a5e" message="Error"/>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="8e27e7d3-13d4-48c8-8635-2f6fb2241a94" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+
+</mule>
